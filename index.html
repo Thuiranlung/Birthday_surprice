@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Protocol: Level Up</title>
+    <style>
+        :root {
+            --bg: #080808;
+            --neon: #00ff88;
+            /* Real Cake Textures */
+            --cake-body: #fbdac8; /* Strawberry cream color */
+            --cake-shadow: rgba(230, 179, 156, 0.4); /* Deeper shade */
+            --frosting: rgba(255, 255, 255, 0.85); /* Semi-transparent icing */
+            --plate: #6b4e3d; /* Polished wood color */
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            background: var(--bg);
+            color: var(--neon);
+            font-family: 'Courier New', monospace;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+
+        /* Large Neon Background Name */
+        #bg-name {
+            position: absolute;
+            font-size: 8vw;
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(0, 255, 136, 0.15);
+            z-index: 1;
+            white-space: nowrap;
+            transition: all 1.2s ease;
+            user-select: none;
+        }
+
+        #container { position: relative; text-align: center; z-index: 10; }
+
+        #mic-init {
+            cursor: pointer;
+            padding: 25px;
+            border: 1px solid var(--neon);
+            background: rgba(0, 255, 136, 0.05);
+            transition: 0.3s;
+        }
+
+        #mic-init:hover { box-shadow: 0 0 20px var(--neon); }
+
+        /* --- REALISTIC 3D CSS CAKE --- */
+        .cake-system {
+            position: relative;
+            width: 250px; height: 250px;
+            margin: 20px auto;
+            perspective: 1000px;
+        }
+
+        .plate {
+            position: absolute; bottom: 20px; left: 50%;
+            transform: translateX(-50%) rotateX(60deg);
+            width: 220px; height: 220px;
+            background: var(--plate);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 0 25px rgba(0,0,0,0.5);
+        }
+
+        .cake-body {
+            position: absolute; bottom: 45px; left: 50%;
+            transform: translateX(-50%);
+            width: 150px; height: 80px;
+            background: radial-gradient(circle at center, var(--cake-body) 60%, var(--cake-shadow));
+            border-radius: 50% 50% 0 0;
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        /* Top frosting with texture */
+        .cake-body::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 60%;
+            background: repeating-linear-gradient(
+                -45deg,
+                var(--frosting),
+                var(--frosting) 2px,
+                transparent 2px,
+                transparent 5px
+            ),
+            linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0));
+            border-radius: 50%;
+            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Real-life frosting drips */
+        .drip {
+            position: absolute; top: 25px; width: 15px; height: 25px;
+            background: var(--frosting); border-radius: 0 0 12px 12px;
+            filter: blur(1px); /* Soften the edges for a real texture */
+        }
+        .d1 { left: 25px; height: 40px; transform: rotate(-5deg); }
+        .d2 { left: 70px; height: 25px; transform: rotate(3deg); }
+        .d3 { left: 110px; height: 35px; transform: rotate(-2deg); }
+
+        /* Candle */
+        .candle {
+            position: absolute; bottom: 120px; left: 50%;
+            transform: translateX(-50%);
+            width: 12px; height: 65px;
+            background: repeating-linear-gradient(45deg, #ff4d4d, #ff4d4d 6px, #fff 6px, #fff 12px);
+            border-radius: 3px;
+            z-index: 5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .flame {
+            position: absolute; bottom: 70px; left: 50%;
+            transform: translateX(-50%);
+            width: 20px; height: 40px;
+            background: radial-gradient(circle at bottom, #fff 20%, #ff9d00 50%, #ff6b00);
+            border-radius: 50% 50% 35% 35%;
+            box-shadow: 0 0 25px #ff9d00, 0 0 50px #ff6b00;
+            animation: flicker 0.12s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-1deg); }
+            100% { transform: translateX(-50%) scale(1.08) rotate(1deg); }
+        }
+
+        /* Celebration Animation for the whole scene */
+        .celebrate #bg-name {
+            color: var(--neon);
+            -webkit-text-stroke: 0px;
+            text-shadow: 0 0 35px var(--neon);
+            animation: dance 0.6s infinite alternate;
+        }
+
+        @keyframes dance {
+            from { transform: translateY(0); }
+            to { transform: translateY(-25px); }
+        }
+
+        .extinguished .flame { opacity: 0; transform: translateX(-50%) scale(0); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="bg-name">NGAEKMEI PHAOMEI</div>
+
+    <div id="container">
+        <div id="mic-init" onclick="init()">
+            <p>> SYSTEM: STANDBY</p>
+            <p>> RENDERER: TEXTURE_ENGINE_ON</p>
+            <h2 style="color: white;">[ CLICK TO ACTIVATE PROTOCOL ]</h2>
+        </div>
+
+        <div id="active-zone" class="hidden">
+            <p id="status">> SENSORS ARMED: BLOW TO START MELODY</p>
+            
+            <div class="cake-system" id="cake-system">
+                <div class="plate"></div>
+                <div class="cake-body">
+                    <div class="drip d1"></div>
+                    <div class="drip d2"></div>
+                    <div class="drip d3"></div>
+                </div>
+                <div class="candle">
+                    <div class="flame" id="flame"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let audioCtx, analyser, dataArray;
+        let isBlown = false;
+
+        const NOTES = {
+            'G4': 392, 'A4': 440, 'C5': 523, 'B4': 493, 'D5': 587
+        };
+
+        const MELODY = [
+            {n: 'G4', d: 0.3}, {n: 'G4', d: 0.1}, {n: 'A4', d: 0.5}, {n: 'G4', d: 0.5}, {n: 'C5', d: 0.5}, {n: 'B4', d: 1.0},
+            {n: 'G4', d: 0.3}, {n: 'G4', d: 0.1}, {n: 'A4', d: 0.5}, {n: 'G4', d: 0.5}, {n: 'D5', d: 0.5}, {n: 'C5', d: 1.0}
+        ];
+
+        async function init() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                document.getElementById('mic-init').classList.add('hidden');
+                document.getElementById('active-zone').classList.remove('hidden');
+
+                const source = audioCtx.createMediaStreamSource(stream);
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 256;
+                source.connect(analyser);
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+                loop();
+            } catch (err) {
+                alert("Microphone required for the 'Blow' interaction!");
+            }
+        }
+
+        function playPianoNote(freq, duration, startTime) {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'triangle'; // Softer, piano-like tone
+            osc.frequency.setValueAtTime(freq, startTime);
+            g.gain.setValueAtTime(0, startTime);
+            g.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+            g.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+            osc.connect(g); g.connect(audioCtx.destination);
+            osc.start(startTime); osc.stop(startTime + duration);
+        }
+
+        function playHorn() {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.1);
+            g.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.2);
+            osc.connect(g); g.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 1.2);
+        }
+
+        function loop() {
+            if (isBlown) return;
+            requestAnimationFrame(loop);
+            analyser.getByteFrequencyData(dataArray);
+
+            // Calculate low frequency rumble (blowing sound)
+            let sum = 0;
+            for(let i=0; i<10; i++) sum += dataArray[i];
+            let vol = sum / 10;
+
+            if (vol > 170) {
+                isBlown = true;
+                celebrate();
+            }
+        }
+
+        function celebrate() {
+            document.getElementById('cake-system').classList.add('extinguished');
+            document.getElementById('status').innerText = "> BLOW SUCCESSFUL. HAPPY BIRTHDAY NGAEKMEI PHAOMEI!";
+            document.body.classList.add('celebrate');
+            
+            // Sync Audio
+            let time = audioCtx.currentTime;
+            MELODY.forEach(note => {
+                playPianoNote(NOTES[note.n], note.d, time);
+                time += note.d;
+            });
+            playHorn();
+            
+            console.log("Birthday Piano Protocol Complete.");
+        }
+    </script>
+</body>
+</html>
